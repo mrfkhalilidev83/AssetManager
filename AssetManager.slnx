@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="AssetManager.Application/AssetManager.Application.csproj" />
+  <Project Path="AssetManager.Domain/AssetManager.Domain.csproj" />
+  <Project Path="AssetManager.Infrastructure/AssetManager.Infrastructure.csproj" />
+  <Project Path="AssetManager.UI/AssetManager.UI.csproj" />
+</Solution>

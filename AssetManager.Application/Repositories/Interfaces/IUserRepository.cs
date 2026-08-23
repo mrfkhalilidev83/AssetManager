@@ -4,5 +4,5 @@ namespace AssetManager.Application.Repositories.Interfaces;
 
 public interface IUserRepository
 {
-    Task<User?> GetByUsernameOrPhoneAsync(string usernameOrPhone);
+    Task<List<User>> GetByUsernameOrPhoneAsync(string? usernameOrPhone);
 }

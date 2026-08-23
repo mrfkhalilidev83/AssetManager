@@ -14,20 +14,24 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<User?> GetByUsernameOrPhoneAsync(string usernameOrPhone)
+    public async Task<List<User>> GetByUsernameOrPhoneAsync(string? usernameOrPhone)
     {
-        var users = await _context.Users
+        return await _context.Users
             .FromSqlRaw(
                 """
-                SELECT *
+                SELECT
+                    "Id",
+                    "PhoneNumber",
+                    "Username",
+                    "PasswordHash",
+                    "CreatedAt"
                 FROM "Users"
-                WHERE "Username" = {0}
-                   OR "PhoneNumber" = {0}
-                LIMIT 1
+                WHERE
+                    {0} IS NULL
+                    OR "Username" = {0}
+                    OR "PhoneNumber" = {0}
                 """,
                 usernameOrPhone)
             .ToListAsync();
-
-        return users.FirstOrDefault();
     }
 }

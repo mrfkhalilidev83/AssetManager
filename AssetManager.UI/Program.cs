@@ -1,11 +1,12 @@
-using AssetManager.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using AssetManager.Application.Repositories.Interfaces;
-using AssetManager.Infrastructure.Repositories;
 using AssetManager.Application.Services;
 using AssetManager.Application.Services.Interfaces;
+using AssetManager.Infrastructure.Data;
+using AssetManager.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace AssetManager.UI;
 
@@ -17,25 +18,16 @@ internal static class Program
         System.Windows.Forms.Application.EnableVisualStyles();
         System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
 
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(AppContext.BaseDirectory)
-            .AddJsonFile(
-                "appsettings.json",
-                optional: false,
-                reloadOnChange: true)
-            .Build();
+        var builder = Host.CreateApplicationBuilder();
 
-        var services = new ServiceCollection();
-
-        services.AddDbContext<AppDbContext>(options =>
+        builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(
-                configuration.GetConnectionString("AssetManagerDb")));
+                builder.Configuration.GetConnectionString("AssetManagerDb")));
 
-        services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IUserService, UserService>();
 
-        services.AddScoped<IUserService, UserService>();
-
-        var serviceProvider = services.BuildServiceProvider();
+        var host = builder.Build();
 
         System.Windows.Forms.Application.Run(new Form1());
     }

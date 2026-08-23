@@ -1,9 +1,13 @@
 using AssetManager.Application.Repositories.Interfaces;
+using AssetManager.Application.Security.Interfaces;
 using AssetManager.Application.Services;
 using AssetManager.Application.Services.Interfaces;
+using AssetManager.Application.Validators.Users;
 using AssetManager.Infrastructure.Data;
 using AssetManager.Infrastructure.Repositories;
+using AssetManager.Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +30,9 @@ internal static class Program
 
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+        builder.Services.AddScoped<RegisterUserValidator>();
+        builder.Services.AddScoped<LoginUserValidator>();
 
         var host = builder.Build();
 

@@ -34,4 +34,55 @@ public class UserRepository : IUserRepository
                 usernameOrPhone)
             .ToListAsync();
     }
+
+    public async Task<bool> ExistsByUsernameAsync(string username)
+    {
+        var result = await _context.Users
+            .FromSqlRaw(
+                """
+                SELECT
+                    "Id",
+                    "PhoneNumber",
+                    "Username",
+                    "PasswordHash",
+                    "CreatedAt"
+                FROM "Users"
+                WHERE "Username" = {0}
+                LIMIT 1
+                """,
+                username)
+            .ToListAsync();
+
+        return result.Count > 0;
+    }
+
+    public async Task<bool> ExistsByPhoneNumberAsync(string phoneNumber)
+    {
+        var result = await _context.Users
+            .FromSqlRaw(
+                """
+                SELECT
+                    "Id",
+                    "PhoneNumber",
+                    "Username",
+                    "PasswordHash",
+                    "CreatedAt"
+                FROM "Users"
+                WHERE "PhoneNumber" = {0}
+                LIMIT 1
+                """,
+                phoneNumber)
+            .ToListAsync();
+
+        return result.Count > 0;
+    }
+    public async Task<User> CreateAsync(User user)
+    {
+        _context.Users.Add(user);
+
+        await _context.SaveChangesAsync();
+
+        return user;
+    }
+
 }

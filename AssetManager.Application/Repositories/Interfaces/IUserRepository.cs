@@ -11,4 +11,8 @@ public interface IUserRepository
     Task<bool> ExistsByPhoneNumberAsync(string phoneNumber);
 
     Task<User> CreateAsync(User user);
+
+    Task<User?> GetByIdAsync(int id);
+
+    Task DeleteAsync(User user);
 }

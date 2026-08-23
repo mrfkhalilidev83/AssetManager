@@ -8,4 +8,6 @@ public interface IUserService
     Task<User> RegisterAsync(RegisterUserDto request);
 
     Task<User?> LoginAsync(LoginUserDto request);
+
+    Task DeleteAccountAsync(int userId);
 }

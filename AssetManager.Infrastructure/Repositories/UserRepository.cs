@@ -85,4 +85,16 @@ public class UserRepository : IUserRepository
         return user;
     }
 
+    public async Task<User?> GetByIdAsync(int id)
+    {
+        return await _context.Users
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task DeleteAsync(User user)
+    {
+        _context.Users.Remove(user);
+        await _context.SaveChangesAsync();
+    }
+
 }

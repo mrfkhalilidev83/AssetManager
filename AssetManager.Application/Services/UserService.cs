@@ -67,4 +67,17 @@ public class UserService : IUserService
 
         return user;
     }
+
+    public async Task DeleteAccountAsync(int userId)
+    {
+        if (userId <= 0)
+            throw new ArgumentException("Invalid user ID.");
+
+        var user = await _userRepository.GetByIdAsync(userId);
+
+        if (user is null)
+            throw new InvalidOperationException("User not found.");
+
+        await _userRepository.DeleteAsync(user);
+    }
 }

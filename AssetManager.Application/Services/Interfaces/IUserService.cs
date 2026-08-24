@@ -10,4 +10,6 @@ public interface IUserService
     Task<User?> LoginAsync(LoginUserDto request);
 
     Task DeleteAccountAsync(int userId);
+
+    Task<User?> GetByIdAsync(int userId);
 }

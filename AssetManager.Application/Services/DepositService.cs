@@ -31,8 +31,13 @@ public class DepositService : IDepositService
 
         var asset = await _assetRepository.GetByUserIdAsync(request.UserId);
 
+        bool isNewAsset = false;
+
         if (asset is null)
+        {
             asset = await _assetRepository.CreateForUserAsync(request.UserId);
+            isNewAsset = true;
+        }
 
         switch (request.AssetType)
         {
@@ -63,7 +68,10 @@ public class DepositService : IDepositService
             CreatedAt = DateTime.UtcNow
         };
 
-        await _assetRepository.UpdateAsync(asset);
+        if (!isNewAsset)
+        {
+            await _assetRepository.UpdateAsync(asset);
+        }
         await _transactionRepository.AddAsync(transaction);
 
         await _unitOfWork.SaveChangesAsync();

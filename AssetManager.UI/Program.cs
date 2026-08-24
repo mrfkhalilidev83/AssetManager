@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using AssetManager.UI.Forms;
 
 namespace AssetManager.UI;
 
@@ -38,9 +39,20 @@ internal static class Program
         builder.Services.AddScoped<IDepositService, DepositService>();
         builder.Services.AddScoped<IWithdrawalService, WithdrawalService>();
         builder.Services.AddScoped<ITransactionService, TransactionService>();
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+        builder.Services.AddScoped<LoginForm>();
+        builder.Services.AddScoped<RegisterForm>();
+        builder.Services.AddScoped<AssetForm>();
+        builder.Services.AddScoped<DepositForm>();
+        builder.Services.AddScoped<WithdrawalForm>();
+        builder.Services.AddScoped<TransactionHistoryForm>();
 
         var host = builder.Build();
 
-        System.Windows.Forms.Application.Run(new Form1());
+        using var scope = host.Services.CreateScope();
+
+        var loginForm = scope.ServiceProvider.GetRequiredService<LoginForm>();
+
+        System.Windows.Forms.Application.Run(loginForm);
     }
 }

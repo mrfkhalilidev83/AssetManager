@@ -80,4 +80,12 @@ public class UserService : IUserService
 
         await _userRepository.DeleteAsync(user);
     }
+
+    public async Task<User?> GetByIdAsync(int userId)
+    {
+        if (userId <= 0)
+            throw new ArgumentException("Invalid user ID.");
+
+        return await _userRepository.GetByIdAsync(userId);
+    }
 }

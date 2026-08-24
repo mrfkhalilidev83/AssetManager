@@ -22,6 +22,7 @@ public class AssetTransactionRepository : IAssetTransactionRepository
     public async Task<List<AssetTransaction>> GetByUserIdAsync(int userId)
     {
         return await _context.AssetTransactions
+            .Include(x => x.User)
             .Where(x => x.UserId == userId)
             .OrderByDescending(x => x.CreatedAt)
             .ToListAsync();

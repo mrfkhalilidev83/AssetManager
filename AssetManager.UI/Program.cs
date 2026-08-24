@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
 
 namespace AssetManager.UI;
 
@@ -33,6 +32,12 @@ internal static class Program
         builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
         builder.Services.AddScoped<RegisterUserValidator>();
         builder.Services.AddScoped<LoginUserValidator>();
+        builder.Services.AddScoped<IAssetRepository, AssetRepository>();
+        builder.Services.AddScoped<IAssetService, AssetService>();
+        builder.Services.AddScoped<IAssetTransactionRepository, AssetTransactionRepository>();
+        builder.Services.AddScoped<IDepositService, DepositService>();
+        builder.Services.AddScoped<IWithdrawalService, WithdrawalService>();
+        builder.Services.AddScoped<ITransactionService, TransactionService>();
 
         var host = builder.Build();
 

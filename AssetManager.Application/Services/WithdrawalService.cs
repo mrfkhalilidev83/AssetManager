@@ -10,13 +10,16 @@ public class WithdrawalService : IWithdrawalService
 {
     private readonly IAssetRepository _assetRepository;
     private readonly IAssetTransactionRepository _transactionRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
     public WithdrawalService(
         IAssetRepository assetRepository,
-        IAssetTransactionRepository transactionRepository)
+        IAssetTransactionRepository transactionRepository,
+        IUnitOfWork unitOfWork)
     {
         _assetRepository = assetRepository;
         _transactionRepository = transactionRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task WithdrawAsync(WithdrawalDto request)
@@ -64,8 +67,6 @@ public class WithdrawalService : IWithdrawalService
 
         asset.UpdatedAt = DateTime.UtcNow;
 
-        await _assetRepository.UpdateAsync(asset);
-
         var transaction = new AssetTransaction
         {
             UserId = request.UserId,
@@ -75,6 +76,9 @@ public class WithdrawalService : IWithdrawalService
             CreatedAt = DateTime.UtcNow
         };
 
+        await _assetRepository.UpdateAsync(asset);
         await _transactionRepository.AddAsync(transaction);
+
+        await _unitOfWork.SaveChangesAsync();
     }
 }

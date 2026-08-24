@@ -17,7 +17,6 @@ public class AssetTransactionRepository : IAssetTransactionRepository
     public async Task AddAsync(AssetTransaction transaction)
     {
         await _context.AssetTransactions.AddAsync(transaction);
-        await _context.SaveChangesAsync();
     }
 
     public async Task<List<AssetTransaction>> GetByUserIdAsync(int userId)

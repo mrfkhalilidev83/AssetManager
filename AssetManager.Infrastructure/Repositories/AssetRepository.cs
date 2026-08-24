@@ -32,14 +32,13 @@ public class AssetRepository : IAssetRepository
         };
 
         await _context.Assets.AddAsync(asset);
-        await _context.SaveChangesAsync();
 
         return asset;
     }
 
-    public async Task UpdateAsync(Asset asset)
+    public Task UpdateAsync(Asset asset)
     {
         _context.Assets.Update(asset);
-        await _context.SaveChangesAsync();
+        return Task.CompletedTask;
     }
 }

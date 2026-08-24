@@ -9,13 +9,16 @@ public class DepositService : IDepositService
 {
     private readonly IAssetRepository _assetRepository;
     private readonly IAssetTransactionRepository _transactionRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
     public DepositService(
         IAssetRepository assetRepository,
-        IAssetTransactionRepository transactionRepository)
+        IAssetTransactionRepository transactionRepository,
+        IUnitOfWork unitOfWork)
     {
         _assetRepository = assetRepository;
         _transactionRepository = transactionRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task DepositAsync(DepositDto request)
@@ -51,8 +54,6 @@ public class DepositService : IDepositService
 
         asset.UpdatedAt = DateTime.UtcNow;
 
-        await _assetRepository.UpdateAsync(asset);
-
         var transaction = new AssetTransaction
         {
             UserId = request.UserId,
@@ -62,6 +63,9 @@ public class DepositService : IDepositService
             CreatedAt = DateTime.UtcNow
         };
 
+        await _assetRepository.UpdateAsync(asset);
         await _transactionRepository.AddAsync(transaction);
+
+        await _unitOfWork.SaveChangesAsync();
     }
 }

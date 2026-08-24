@@ -22,13 +22,13 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<Asset>()
             .HasOne(x => x.User)
-            .WithMany()
-            .HasForeignKey(x => x.UserId)
+            .WithOne(x => x.Asset)
+            .HasForeignKey<Asset>(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<AssetTransaction>()
             .HasOne(x => x.User)
-            .WithMany()
+            .WithMany(x => x.Transactions)
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
     }
